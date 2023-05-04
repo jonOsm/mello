@@ -18,13 +18,6 @@
 	let lists: List[]
 	$: lists = data.lists
 
-	// $: lists: List = data.lists
-	// const lists: List[] = [ { title: 'backlog', cards: [{ title: 'this is a card' }, { title: 'this is another card' }] },
-	// 	{ title: 'hold' },
-	// 	{ title: 'ongoing' },
-	// 	{ title: 'done' }
-	// ]
-
 	const beginCreateNewList = () => {
 		lists = [...lists, { title: 'new list' }]
 	}

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
+
 	interface Card {
 		title: string
 	}
@@ -14,7 +16,7 @@
 
 <div class="w-1/6 flex-col flex gap-1 p-3 bg-surface-200-700-token">
 	{#if isEditing}
-		<form method="post" action="?/lists/{data.id ? 'edit' : 'create'}">
+		<form method="post" action="?/lists/{data.id ? 'edit' : 'create'}" use:enhance>
 			<input type="hidden" value={data.id} name="id" />
 			<input
 				placeholder="Enter List Name"
