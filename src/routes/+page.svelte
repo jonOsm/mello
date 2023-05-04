@@ -41,6 +41,7 @@
 			<div class="">
 				<h2 class="">No Lists Found</h2>
 				<form method="post" action="?/lists/new">
+					<label for="add-title">title</label>
 					<button type="submit" class="text-primary-100-800-token btn btn-lg bg-primary-300 w-full">
 						Add List
 					</button>
