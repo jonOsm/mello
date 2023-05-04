@@ -13,19 +13,23 @@
 	interface List {
 		id?: string
 		title: string
+		ordinal: number
 		cards?: Card[]
 	}
 	let lists: List[]
 	$: lists = data.lists
+	let maxOrdinal: number
+	$: maxOrdinal = Math.max(...lists.map((l) => l.ordinal), 0)
+	console.log(maxOrdinal)
 
 	const beginCreateNewList = () => {
-		lists = [...lists, { title: 'new list' }]
+		lists = [...lists, { title: 'new list', ordinal: maxOrdinal + 1 }]
 	}
 </script>
 
 <div class="flex p-3 gap-3 w-full h-full">
 	{#if lists.length > 0}
-		{#each lists as list (list.id)}<List data={list} />{/each}
+		{#each lists as list (list.id)}<List data={list} isEditing={!list.id} />{/each}
 	{:else}
 		<div class="flex place-content-center w-full h-full items-center">
 			<div class="">
@@ -40,4 +44,14 @@
 			</div>
 		</div>
 	{/if}
+
+	<div>
+		<button
+			on:click={beginCreateNewList}
+			type="submit"
+			class="text-primary-100-800-token btn btn-lg bg-primary-300 w-full"
+		>
+			Add List
+		</button>
+	</div>
 </div>

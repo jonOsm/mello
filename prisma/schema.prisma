@@ -11,8 +11,9 @@ datasource db {
 }
 
 model List {
-  id    String @id @default(cuid())
-  title String
+  id      String @id @default(cuid())
+  title   String
+  ordinal Int    @unique
 
   Card Card[]
 }
