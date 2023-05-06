@@ -11,7 +11,7 @@ export const load = (async () => {
 }) satisfies PageServerLoad
 
 const newListSchema = z.object({
-	title: z.string().min(1),
+	title: z.string(),
 	ordinal: z.coerce.number()
 })
 

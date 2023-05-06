@@ -19,18 +19,12 @@
 
 <div class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
 	{#if !isEditMode}
-		{#if isEditingTitle}
-			<ListTitleForm {...data} onBlur={() => (isEditingTitle = false)} />
-		{:else}
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<div class="flex">
-				<h3 on:click={() => (isEditingTitle = true)} class="basis-full">
-					{data.title || '(no title found)'}
-				</h3>
-				<button class="btn btn-icon-sm" on:click={() => (isEditMode = true)}>...</button>
-			</div>
-		{/if}
-
+		<ListTitleForm
+			{...data}
+			on:editModeClick={() => (isEditMode = true)}
+			bind:isEditingTitle
+			on:blur
+		/>
 		<div>
 			{#if data.cards && data.cards.length > 0}
 				{#each data.cards as card}
