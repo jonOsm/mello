@@ -13,26 +13,47 @@
 
 	export let data: ListData
 	export let isEditingTitle = false
-	const renderContextPopup = (e:MouseEvent) => {
-				
-	}
+
+	let isEditMode = false
 </script>
 
-<div class="w-1/6 flex-col flex gap-1 p-3 bg-surface-200-700-token" on:contextmenu={renderContextPopup}>
-	{#if isEditingTitle}
-		<ListTitleForm {...data} onBlur={() => isEditingTitle = false}/>
-	{:else}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<h3 on:click={() => (isEditingTitle = true)} class="text-center">
-			{data.title}
-		</h3>
-	{/if}
-	{#if data.cards && data.cards.length > 0}
-		{#each data.cards as card}
-			<div class="card">
-				<div class="card-header">{card.title}</div>
-				<div class="card-footer" />
+<div class="basis-1/2 flex-col flex gap-1 p-3 bg-surface-200-700-token">
+	{#if !isEditMode}
+		{#if isEditingTitle}
+			<ListTitleForm {...data} onBlur={() => (isEditingTitle = false)} />
+		{:else}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<div class="flex">
+				<h3 on:click={() => (isEditingTitle = true)} class="basis-full">
+					{data.title || '(no title found)'}
+				</h3>
+				<button class="btn btn-icon-sm" on:click={() => (isEditMode = true)}>...</button>
 			</div>
-		{/each}
+		{/if}
+
+		<div>
+			{#if data.cards && data.cards.length > 0}
+				{#each data.cards as card}
+					<div class="card">
+						<div class="card-header">{card.title}</div>
+						<div class="card-footer" />
+					</div>
+				{/each}
+			{/if}
+		</div>
+	{:else}
+		<div class="flex flex-col gap-2">
+			<div class="flex">
+				<h3 class="w-full">Edit mode</h3>
+				<button class="btn btn-icon-sm" on:click={() => (isEditMode = false)}> {'<'}</button>
+			</div>
+			<button class="btn w-full variant-filled-warning">Archive</button>
+			<form method="post" action="?/lists/delete" use:enhance>
+				<button class="btn w-full variant-filled-error">
+					<input type="hidden" name="id" bind:value={data.id} />
+					delete
+				</button>
+			</form>
+		</div>
 	{/if}
 </div>

@@ -17,8 +17,12 @@ const newListSchema = z.object({
 
 const editListSchema = z.object({
 	id: z.string().min(8),
-	title: z.string().min(1),
+	title: z.string(),
 	ordinal: z.coerce.number()
+})
+
+const deleteListSchema = z.object({
+	id: z.string().min(8)
 })
 
 export const actions = {
@@ -49,7 +53,19 @@ export const actions = {
 		} else {
 			return fail(400, { errors: parsedData.error.errors })
 		}
+	},
+	'lists/delete': async ({ request }) => {
+		const rawData = Object.fromEntries(await request.formData())
+		const parsedData = deleteListSchema.safeParse(rawData)
 
-		return { testing: 'testing' }
+		if (parsedData.success) {
+			const { id } = parsedData.data
+
+			await prisma.list.delete({
+				where: { id }
+			})
+		} else {
+			return fail(400, { errors: parsedData.error.errors })
+		}
 	}
 } satisfies Actions

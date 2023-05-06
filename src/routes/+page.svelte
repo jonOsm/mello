@@ -27,10 +27,9 @@
 	const beginCreateNewList = () => {
 		lists = [...lists, { title: '', ordinal: maxOrdinal + 1 }]
 	}
-
 </script>
 
-<div class="flex p-3 gap-3 w-full h-full">
+<div class="flex overflow-x-auto p-3 gap-3 w-full h-full">
 	{#if lists.length > 0}
 		{#each lists as list (list.id)}<List data={list} isEditingTitle={!list.id} />{/each}
 	{:else}
