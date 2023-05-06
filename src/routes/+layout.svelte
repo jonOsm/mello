@@ -9,7 +9,7 @@
 </script>
 
 <!-- App Shell -->
-<AppShell>
+<AppShell regionPage="flex-nowrap">
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
 		<AppBar>

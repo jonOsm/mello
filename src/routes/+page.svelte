@@ -29,7 +29,7 @@
 	}
 </script>
 
-<div class="flex overflow-x-auto p-3 gap-3 w-full h-full">
+<div class="flex flex-nowrap h-full overflow-x-auto p-3 gap-3">
 	{#if lists.length > 0}
 		{#each lists as list (list.id)}<List data={list} isEditingTitle={!list.id} />{/each}
 	{:else}

@@ -17,7 +17,7 @@
 	let isEditMode = false
 </script>
 
-<div class="basis-1/2 flex-col flex gap-1 p-3 bg-surface-200-700-token">
+<div class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
 	{#if !isEditMode}
 		{#if isEditingTitle}
 			<ListTitleForm {...data} onBlur={() => (isEditingTitle = false)} />
