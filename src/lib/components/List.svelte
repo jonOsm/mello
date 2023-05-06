@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { tick } from 'svelte'
-
+	import ListTitleForm from './ListTitleForm.svelte'
 	interface Card {
 		title: string
 	}
@@ -13,29 +12,18 @@
 	}
 
 	export let data: ListData
-	export let isEditing = false
+	export let isEditingTitle = false
+	const renderContextPopup = (e:MouseEvent) => {
+				
+	}
 </script>
 
-<div class="w-1/6 flex-col flex gap-1 p-3 bg-surface-200-700-token">
-	{#if isEditing}
-		<form method="POST" action="?/lists/{data.id ? 'edit' : 'new'}" use:enhance>
-			<input type="hidden" value={data.id} name="id" />
-			<input type="hidden" value={data.ordinal} name="ordinal" />
-			<input
-				placeholder="Enter List Name"
-				class="input"
-				name="title"
-				autofocus
-				bind:value={data.title}
-				on:focus={async (e) => {}}
-				on:blur={(e) => {
-					isEditing = false
-				}}
-			/>
-		</form>
+<div class="w-1/6 flex-col flex gap-1 p-3 bg-surface-200-700-token" on:contextmenu={renderContextPopup}>
+	{#if isEditingTitle}
+		<ListTitleForm {...data} onBlur={() => isEditingTitle = false}/>
 	{:else}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<h3 on:click={() => (isEditing = true)} class="text-center">
+		<h3 on:click={() => (isEditingTitle = true)} class="text-center">
 			{data.title}
 		</h3>
 	{/if}

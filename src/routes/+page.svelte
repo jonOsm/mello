@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { ActionData, PageData } from './$types'
 	import List from '$lib/components/List.svelte'
+
 	export let form: ActionData
 	export let data: PageData
+
 	console.log(data.lists)
-	let isAddingList = false
 
 	interface Card {
 		title: string
@@ -16,20 +17,22 @@
 		ordinal: number
 		cards?: Card[]
 	}
+
 	let lists: List[]
 	$: lists = data.lists
+
 	let maxOrdinal: number
 	$: maxOrdinal = Math.max(...lists.map((l) => l.ordinal), 0)
-	console.log(maxOrdinal)
 
 	const beginCreateNewList = () => {
-		lists = [...lists, { title: 'new list', ordinal: maxOrdinal + 1 }]
+		lists = [...lists, { title: '', ordinal: maxOrdinal + 1 }]
 	}
+
 </script>
 
 <div class="flex p-3 gap-3 w-full h-full">
 	{#if lists.length > 0}
-		{#each lists as list (list.id)}<List data={list} isEditing={!list.id} />{/each}
+		{#each lists as list (list.id)}<List data={list} isEditingTitle={!list.id} />{/each}
 	{:else}
 		<div class="flex place-content-center w-full h-full items-center">
 			<div class="">
