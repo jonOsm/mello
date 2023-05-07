@@ -12,6 +12,7 @@
 		id?: string
 		title: string
 		ordinal: number
+		boardId: string
 		cards?: Card[]
 	}
 	let lists: List[]
@@ -21,7 +22,7 @@
 	$: maxOrdinal = Math.max(...lists.map((l) => l.ordinal), 0)
 
 	let defaultList: List
-	$: defaultList = { title: '', ordinal: maxOrdinal + 1 }
+	$: defaultList = { title: '', ordinal: maxOrdinal + 1, boardId: data.boardId }
 	let showCreateForm: boolean = false
 	const beginCreateNewList = () => {
 		// lists = [...lists, { title: '', ordinal: maxOrdinal + 1 }]

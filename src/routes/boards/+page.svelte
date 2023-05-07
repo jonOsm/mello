@@ -38,16 +38,18 @@
 		<div
 			class="col-span-12 sm:col-span-3 h-48 bg-surface-200-700-token flex flex-col justify-center items-center"
 		>
-			<h2>{board.name || '(unnamed board)'}</h2>
+			<a href="/boards/{board.id}">
+				<h2>{board.name || '(unnamed board)'}</h2>
+			</a>
 			<button
-				on:click={() => {
+				on:click|stopPropagation={() => {
 					action = 'edit'
 					selectedBoard = board
 				}}
 				class="btn-icon-sm">e</button
 			>
 			<button
-				on:click={() => {
+				on:click|stopPropagation={() => {
 					action = 'delete'
 					selectedBoard = board
 				}}

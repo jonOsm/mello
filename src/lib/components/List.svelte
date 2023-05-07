@@ -8,6 +8,7 @@
 		id?: string
 		title: string
 		ordinal: number
+		boardId: string
 		cards?: Card[]
 	}
 

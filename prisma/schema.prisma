@@ -14,8 +14,9 @@ model List {
   id      String @id @default(cuid())
   title   String
   ordinal Int    @unique
-
-  Card Card[]
+  board   Board  @relation(fields: [boardId], references: [id])
+  boardId String
+  Card    Card[]
 }
 
 model Card {
@@ -26,6 +27,7 @@ model Card {
 }
 
 model Board {
-  id   String @id @default(cuid())
-  name String
+  id    String @id @default(cuid())
+  name  String
+  lists List[]
 }

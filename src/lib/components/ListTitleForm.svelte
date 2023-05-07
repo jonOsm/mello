@@ -5,6 +5,7 @@
 	export let id: string | null = null
 	export let ordinal: number
 	export let title: string
+	export let boardId: string | null = null
 	export let isEditingTitle: boolean = false
 
 	let form: HTMLFormElement
@@ -15,6 +16,7 @@
 	<form bind:this={form} method="POST" action="?/lists/{id ? 'edit' : 'new'}" use:enhance>
 		<input type="hidden" value={id} name="id" />
 		<input type="hidden" value={ordinal} name="ordinal" />
+		<input type="hidden" value={boardId} name="boardId" />
 		<input
 			placeholder="Enter List Name"
 			class="input"
