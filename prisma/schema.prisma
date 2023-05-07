@@ -24,3 +24,8 @@ model Card {
   list   List   @relation(fields: [listId], references: [id])
   listId String
 }
+
+model Board {
+  id   String @id @default(cuid())
+  name String
+}

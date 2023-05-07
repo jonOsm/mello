@@ -6,6 +6,8 @@
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss'
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton'
+	import { Modal, modalStore } from '@skeletonlabs/skeleton';
+import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 </script>
 
 <!-- App Shell -->
