@@ -30,7 +30,7 @@
 			/>
 		</label>
 		<input type="hidden" name="id" bind:value={boardId} />
-		<button type="submit" class="btn variant-filled-primary">Create</button>
+		<button type="submit" class="btn variant-filled-primary capitalize">{action}</button>
 		<button on:click={() => modalStore.close()} type="button" class="btn variant-filled-surface"
 			>Cancel</button
 		>
