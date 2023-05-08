@@ -1,7 +1,9 @@
-import type { Board } from '@prisma/client'
+import type { ActiveBoard } from '$lib/types/board'
 import { writable, type Writable } from 'svelte/store'
-
-export const board: Writable<Partial<Board>> = writable({
+//TODO: May wish to scope this in a context
+// by default it is globally accessible
+export const activeBoard: Writable<ActiveBoard> = writable({
 	lists: [],
+	showCreateForm: false,
 	id: ''
 })

@@ -1,29 +1,28 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { createEventDispatcher } from 'svelte'
-	const dispatch = createEventDispatcher()
-	export let id: string | null = null
-	export let ordinal: number
-	export let title: string
-	export let boardId: string | null = null
-	export let isEditingTitle: boolean = false
+	import type { List } from '$lib/types/list'
+	import { activeBoard } from '$lib/stores/board'
 
-	let form: HTMLFormElement
-	//leave comment for syntax highlighting + prettier
+	const dispatch = createEventDispatcher()
+	export let list: List
+	export let isEditingTitle: boolean = false
+	//
 </script>
 
 {#if isEditingTitle}
-	<form bind:this={form} method="POST" action="?/lists/{id ? 'edit' : 'new'}" use:enhance>
-		<input type="hidden" value={id} name="id" />
-		<input type="hidden" value={ordinal} name="ordinal" />
-		<input type="hidden" value={boardId} name="boardId" />
+	<form method="POST" action="?/lists/{list.id ? 'edit' : 'new'}" use:enhance>
+		<input type="hidden" value={list.id} name="id" />
+		<input type="hidden" value={list.ordinal} name="ordinal" />
+		<input type="hidden" value={list.boardId} name="boardId" />
 		<input
 			placeholder="Enter List Name"
 			class="input"
 			name="title"
 			autofocus
-			bind:value={title}
+			value={list.title}
 			on:blur={(e) => {
+				$activeBoard.showCreateForm = false
 				isEditingTitle = false
 				dispatch('blur', e)
 			}}
@@ -33,7 +32,7 @@
 	<div class="flex">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<h3 on:click={() => (isEditingTitle = true)} class="basis-full">
-			{title || '(no title found)'}
+			{list.title || '(no title found)'}
 		</h3>
 		<button
 			class="btn btn-icon-sm"

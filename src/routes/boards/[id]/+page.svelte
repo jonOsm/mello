@@ -1,41 +1,29 @@
 <script lang="ts">
 	import type { ActionData, PageData } from './$types'
+	import { activeBoard } from '$lib/stores/board'
+	import type { List as ListType } from '$lib/types/list'
 	import List from '$lib/components/List.svelte'
 
 	export let data: PageData
-
-	interface Card {
-		title: string
-	}
-
-	interface List {
-		id?: string
-		title: string
-		ordinal: number
-		boardId: string
-		cards?: Card[]
-	}
-	let lists: List[]
-	$: lists = data.lists
+	$: $activeBoard = { id: data.boardId, lists: data.lists, showCreateForm: false }
 
 	let maxOrdinal: number
-	$: maxOrdinal = Math.max(...lists.map((l) => l.ordinal), 0)
+	$: maxOrdinal = Math.max(...$activeBoard.lists.map((l: ListType) => l.ordinal), 0)
 
-	let defaultList: List
-	$: defaultList = { title: '', ordinal: maxOrdinal + 1, boardId: data.boardId }
-	let showCreateForm: boolean = false
+	let defaultList: ListType
+	$: defaultList = { title: '', ordinal: maxOrdinal + 1, boardId: $activeBoard?.id }
+
 	const beginCreateNewList = () => {
-		// lists = [...lists, { title: '', ordinal: maxOrdinal + 1 }]
-		showCreateForm = true
+		$activeBoard.showCreateForm = true
 	}
 </script>
 
 <div class="flex flex-nowrap h-full overflow-x-auto p-3 gap-3">
-	{#if lists.length > 0}
-		{#each lists as list (list.id)}
-			<List data={list} isEditingTitle={!list.id} />
+	{#if $activeBoard.lists.length > 0}
+		{#each $activeBoard.lists as list (list.id)}
+			<List {list} isEditingTitle={!list.id} />
 		{/each}
-		{#if !showCreateForm}
+		{#if !$activeBoard.showCreateForm}
 			<div>
 				<button
 					on:click={beginCreateNewList}
@@ -47,7 +35,7 @@
 			</div>
 		{/if}
 	{/if}
-	{#if lists.length <= 0 && !showCreateForm}
+	{#if $activeBoard.lists.length <= 0 && !$activeBoard.showCreateForm}
 		<div class="flex place-content-center w-full h-full items-center">
 			<div class="">
 				<h2 class="">No Lists Found</h2>
@@ -61,7 +49,7 @@
 			</div>
 		</div>
 	{/if}
-	{#if showCreateForm}
-		<List data={defaultList} isEditingTitle on:blur={() => (showCreateForm = false)} />
+	{#if $activeBoard.showCreateForm}
+		<List list={defaultList} isEditingTitle />
 	{/if}
 </div>

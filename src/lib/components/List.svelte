@@ -1,18 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import type { List } from '$lib/types/list'
 	import ListTitleForm from './ListTitleForm.svelte'
-	interface Card {
-		title: string
-	}
-	interface ListData {
-		id?: string
-		title: string
-		ordinal: number
-		boardId: string
-		cards?: Card[]
-	}
 
-	export let data: ListData
+	export let list: List
 	export let isEditingTitle = false
 
 	let isEditMode = false
@@ -21,14 +12,14 @@
 <div class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
 	{#if !isEditMode}
 		<ListTitleForm
-			{...data}
+			{list}
 			on:editModeClick={() => (isEditMode = true)}
 			bind:isEditingTitle
 			on:blur
 		/>
 		<div>
-			{#if data.cards && data.cards.length > 0}
-				{#each data.cards as card}
+			{#if list.cards && list.cards.length > 0}
+				{#each list.cards as card}
 					<div class="card">
 						<div class="card-header">{card.title}</div>
 						<div class="card-footer" />
@@ -45,7 +36,7 @@
 			<button class="btn w-full variant-filled-warning">Archive</button>
 			<form method="post" action="?/lists/delete" use:enhance>
 				<button class="btn w-full variant-filled-error">
-					<input type="hidden" name="id" bind:value={data.id} />
+					<input type="hidden" name="id" bind:value={list.id} />
 					delete
 				</button>
 			</form>
