@@ -31,9 +31,18 @@
 {:else}
 	<div class="flex">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<h3 on:click={() => (isEditingTitle = true)} class="basis-full">
-			{list.title || '(no title found)'}
-		</h3>
+		<!-- svelte-ignore a11y-missing-attribute -->
+		<a
+			class="!no-underline"
+			on:click|stopPropagation={() => {
+				isEditingTitle = true
+				return false
+			}}
+		>
+			<h3 tabindex="-1" on:click={() => (isEditingTitle = true)} class="basis-full">
+				{list.title || '(no title found)'}
+			</h3>
+		</a>
 		<button
 			class="btn btn-icon-sm"
 			on:click={() => {

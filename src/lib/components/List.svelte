@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { List } from '$lib/types/list'
+	import type { Card } from '$lib/types/card'
 	import ListTitleForm from './ListTitleForm.svelte'
 
 	export let list: List
 	export let isEditingTitle = false
+	export let cards: Card[]
 
 	let isEditMode = false
+	let isAddingCard = false
 </script>
 
 <div class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
@@ -25,6 +28,11 @@
 						<div class="card-footer" />
 					</div>
 				{/each}
+			{/if}
+			{#if !isAddingCard}
+				<button class="btn variant-ghost-primary w-full">Add Card</button>
+			{:else}
+				<div class="card card-hover p4" />
 			{/if}
 		</div>
 	{:else}

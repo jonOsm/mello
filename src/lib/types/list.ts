@@ -1,10 +1,5 @@
 import type { List as PrismaList } from '@prisma/client'
-//TODO: move to own file
-interface Card {
-	title: string
-	ordinal: number
-}
-
+import type { Card } from '$lib/types/card'
 export interface List extends Partial<PrismaList> {
 	id?: string
 	title: string
