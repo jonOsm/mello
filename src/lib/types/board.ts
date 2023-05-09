@@ -1,8 +1,8 @@
 import type { Board as PrismaBoard } from '@prisma/client'
-import type { List as PrismaList } from '@prisma/client'
+import type { List } from '$lib/types/list'
 
 export interface ActiveBoard extends Partial<PrismaBoard> {
-	lists: PrismaList[]
+	lists: List[]
 	id: string
 	showCreateForm: boolean
 }

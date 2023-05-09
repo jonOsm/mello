@@ -8,10 +8,10 @@
 	$: $activeBoard = { id: data.boardId, lists: data.lists, showCreateForm: false }
 
 	let maxOrdinal: number
-	$: maxOrdinal = Math.max(...$activeBoard.lists.map((l: ListType) => l.ordinal), 0)
+	$: maxOrdinal = Math.max(...$activeBoard.lists.map((l) => l.ordinal), 0)
 
 	let defaultList: ListType
-	$: defaultList = { title: '', ordinal: maxOrdinal + 1, boardId: $activeBoard?.id }
+	$: defaultList = { title: '', ordinal: maxOrdinal + 1, boardId: $activeBoard?.id, cards: [] }
 
 	const beginCreateNewList = () => {
 		$activeBoard.showCreateForm = true

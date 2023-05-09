@@ -5,5 +5,5 @@ export interface List extends Partial<PrismaList> {
 	title: string
 	ordinal: number
 	boardId: string
-	cards?: Card[]
+	cards: Card[]
 }

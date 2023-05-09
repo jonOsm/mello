@@ -6,7 +6,6 @@
 	export let action: 'new' | 'edit' | 'delete'
 	export let boardName = ''
 	export let boardId: string | null = null
-	console.log(boardId)
 </script>
 
 <form
@@ -17,7 +16,19 @@
 	use:enhance
 	use:focusTrap={action !== 'delete'}
 >
-	{#if action !== 'delete'}
+	{#if action == 'delete'}
+		<p class="label">
+			<span
+				>Are you sure you want to delete this board? All associated lists and cards will also be
+				deleted.</span
+			>
+		</p>
+		<input type="hidden" name="id" bind:value={boardId} />
+		<button type="submit" class="btn variant-filled-error">I understand. Delete this board.</button>
+		<button on:click={() => modalStore.close()} type="button" class="btn variant-filled-surface"
+			>Cancel</button
+		>
+	{:else}
 		<label class="label">
 			<span>Board Name </span>
 
@@ -31,18 +42,6 @@
 		</label>
 		<input type="hidden" name="id" bind:value={boardId} />
 		<button type="submit" class="btn variant-filled-primary capitalize">{action}</button>
-		<button on:click={() => modalStore.close()} type="button" class="btn variant-filled-surface"
-			>Cancel</button
-		>
-	{:else}
-		<p class="label">
-			<span
-				>Are you sure you want to delete this board? All associated lists and cards will also be
-				deleted.</span
-			>
-		</p>
-		<input type="hidden" name="id" bind:value={boardId} />
-		<button type="submit" class="btn variant-filled-error">I understand. Delete this board.</button>
 		<button on:click={() => modalStore.close()} type="button" class="btn variant-filled-surface"
 			>Cancel</button
 		>

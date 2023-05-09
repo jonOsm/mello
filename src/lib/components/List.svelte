@@ -1,15 +1,23 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { List } from '$lib/types/list'
-	import type { Card } from '$lib/types/card'
+	import type { Card as CardType } from '$lib/types/card'
 	import ListTitleForm from './ListTitleForm.svelte'
+	import Card from './Card.svelte'
+	import NewCardForm from './NewCardForm.svelte'
 
 	export let list: List
 	export let isEditingTitle = false
-	export let cards: Card[]
 
 	let isEditMode = false
 	let isAddingCard = false
+
+	let maxCardOrdinal: number
+	$: if (list.cards) {
+		maxCardOrdinal = Math.max(...list.cards?.map((c: CardType) => c.ordinal), 0)
+	}
+	let defaultCard: CardType
+	$: defaultCard = { listId: list.id, title: '', ordinal: maxCardOrdinal + 1 }
 </script>
 
 <div class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
@@ -21,18 +29,20 @@
 			on:blur
 		/>
 		<div>
-			{#if list.cards && list.cards.length > 0}
+			{#if list.cards}
 				{#each list.cards as card}
-					<div class="card">
-						<div class="card-header">{card.title}</div>
-						<div class="card-footer" />
-					</div>
+					<Card {card} />
 				{/each}
 			{/if}
-			{#if !isAddingCard}
-				<button class="btn variant-ghost-primary w-full">Add Card</button>
+			{#if isAddingCard}
+				<NewCardForm card={defaultCard} on:submit={() => (isAddingCard = false)} />
 			{:else}
-				<div class="card card-hover p4" />
+				<button
+					class="btn variant-ghost-primary w-full"
+					on:click={() => {
+						isAddingCard = true
+					}}>Add Card</button
+				>
 			{/if}
 		</div>
 	{:else}

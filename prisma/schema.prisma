@@ -16,16 +16,19 @@ model List {
   ordinal Int
   board   Board  @relation(fields: [boardId], references: [id])
   boardId String
-  Card    Card[]
+  cards   Card[]
 
   @@unique([id, ordinal])
 }
 
 model Card {
-  id     String @id @default(cuid())
-  title  String
-  list   List   @relation(fields: [listId], references: [id])
-  listId String
+  id      String @id @default(cuid())
+  title   String
+  ordinal Int
+  list    List   @relation(fields: [listId], references: [id])
+  listId  String
+
+  @@unique([id, ordinal])
 }
 
 model Board {
