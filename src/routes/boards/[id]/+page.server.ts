@@ -47,6 +47,11 @@ const editCardSchema = z.object({
 	title: z.string()
 })
 
+const moveCardSchema = z.object({
+	incrementPastOrdinal: z.coerce.number(),
+	draggedIds: z.array(z.object({ id: z.string().min(8), newOrdinal: z.coerce.number() }))
+})
+
 export const actions = {
 	//maybe just upsert and merge these endpoints?
 	'lists/new': async ({ request }) => {
@@ -108,6 +113,21 @@ export const actions = {
 		if (parsedData.success) {
 			const { id, title } = parsedData.data
 
+			return await prisma.card.update({
+				where: { id },
+				data: { title }
+			})
+		} else {
+			return fail(400, { errors: parsedData.error.errors })
+		}
+	},
+	'cards/bulk/move': async ({ request }) => {
+		const rawData = Object.fromEntries(await request.formData())
+		const parsedData = moveCardSchema.safeParse(rawData)
+
+		if (parsedData.success) {
+			const { incrementPastOrdinal, draggedIds } = parsedData.data
+			const
 			return await prisma.card.update({
 				where: { id },
 				data: { title }

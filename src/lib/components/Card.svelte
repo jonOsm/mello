@@ -3,7 +3,7 @@
 	import { slide } from 'svelte/transition'
 	import { type ModalSettings, type ModalComponent, modalStore } from '@skeletonlabs/skeleton'
 	import EditCardForm from './EditCardForm.svelte'
-	import { dragAndDrop } from '$lib/stores/dragAndDrop'
+	import { dragAndDrop, submit } from '$lib/stores/dragAndDrop'
 
 	export let card: Card
 	let cardEditForm: ModalComponent
@@ -29,9 +29,7 @@
 		$dragAndDrop.sourceItems = [card]
 	}}
 	on:dragend={() => {
-		if ($dragAndDrop.destination) {
-			$dragAndDrop.submit($dragAndDrop.destination)
-		}
+		submit()
 	}}
 	on:dragover|preventDefault={() => {
 		$dragAndDrop.destination = card

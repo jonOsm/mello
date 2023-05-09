@@ -11,7 +11,13 @@
 <!-- adding slot to silence modal warning -->
 <slot />
 
-<form on:submit={() => modalStore.close()} class="flex flex-col gap-3" method="post" use:enhance>
+<form
+	on:submit={() => modalStore.close()}
+	class="flex flex-col gap-3"
+	method="post"
+	action="?/card/edit"
+	use:enhance
+>
 	<input name="id" type="hidden" value={card.id} />
 	<label class="label">
 		<span>Title</span>

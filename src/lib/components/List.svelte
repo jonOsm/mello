@@ -7,6 +7,7 @@
 	import NewCardForm from './NewCardForm.svelte'
 	import { slide } from 'svelte/transition'
 	import { activeBoard } from '$lib/stores/board'
+	import { dragAndDrop, reset } from '$lib/stores/dragAndDrop'
 
 	export let list: List
 	export let isEditingTitle = false
@@ -20,8 +21,24 @@
 	}
 	let defaultCard: CardType
 	$: defaultCard = { listId: list.id, title: '', ordinal: maxCardOrdinal + 1 }
+
+	let bulkEdit: HTMLFormElement
+	$: if ($dragAndDrop.submit) {
+		bulkEdit.requestSubmit()
+		reset()
+	}
 </script>
 
+<form use:enhance bind:this={bulkEdit} method="post" action="?/cards/bulk/edit" class="hidden">
+	<input type="hidden" name="incrementPastOrdinal" value={$dragAndDrop.destination?.id} />
+	<input
+		type="hidden"
+		name="draggedIds"
+		value={$dragAndDrop.sourceItems.map((d, i) => {
+			return { id: d.id, newOrdinal: i + ($dragAndDrop.destination?.ordinal || 0) }
+		})}
+	/>
+</form>
 <div in:slide class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
 	{#if !isEditMode}
 		<ListTitleForm
