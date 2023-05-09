@@ -7,7 +7,6 @@
 	//
 
 	let action: string | null = null
-	let formVisible = false
 	let selectedBoard: Board | null = null
 
 	// TODO: Reach out to sveltekit/skeleton pro and ask if this

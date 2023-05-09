@@ -5,7 +5,7 @@
 	import List from '$lib/components/List.svelte'
 
 	export let data: PageData
-	$: $activeBoard = { id: data.boardId, lists: data.lists, showCreateForm: false }
+	$: $activeBoard = { id: data.boardId, lists: data.lists as ListType[], showCreateForm: false }
 
 	let maxOrdinal: number
 	$: maxOrdinal = Math.max(...$activeBoard.lists.map((l) => l.ordinal), 0)
