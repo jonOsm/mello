@@ -5,6 +5,8 @@
 	import ListTitleForm from './ListTitleForm.svelte'
 	import Card from './Card.svelte'
 	import NewCardForm from './NewCardForm.svelte'
+	import { slide } from 'svelte/transition'
+	import { activeBoard } from '$lib/stores/board'
 
 	export let list: List
 	export let isEditingTitle = false
@@ -20,7 +22,7 @@
 	$: defaultCard = { listId: list.id, title: '', ordinal: maxCardOrdinal + 1 }
 </script>
 
-<div class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
+<div in:slide class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
 	{#if !isEditMode}
 		<ListTitleForm
 			{list}
@@ -36,7 +38,7 @@
 			{/if}
 			{#if isAddingCard}
 				<NewCardForm card={defaultCard} on:submit={() => (isAddingCard = false)} />
-			{:else}
+			{:else if !$activeBoard.showCreateForm}
 				<button
 					class="btn variant-ghost-primary w-full"
 					on:click={() => {

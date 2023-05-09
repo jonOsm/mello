@@ -34,7 +34,8 @@ const deleteListSchema = z.object({
 
 const newCardSchema = z.object({
 	listId: z.string().min(8),
-	title: z.string()
+	title: z.string(),
+	ordinal: z.coerce.number()
 })
 
 export const actions = {
@@ -82,10 +83,10 @@ export const actions = {
 		const parsedData = newCardSchema.safeParse(rawData)
 
 		if (parsedData.success) {
-			const { listId, title } = parsedData.data
+			const { listId, title, ordinal } = parsedData.data
 
 			return await prisma.card.create({
-				data: { title, listId }
+				data: { title, listId, ordinal }
 			})
 		} else {
 			return fail(400, { errors: parsedData.error.errors })
