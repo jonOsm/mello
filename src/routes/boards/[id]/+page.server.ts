@@ -8,7 +8,11 @@ export const load = (async ({ params }) => {
 	return {
 		lists: await prisma.list.findMany({
 			where: { boardId: params.id },
-			include: { cards: true },
+			include: {
+				cards: {
+					orderBy: { ordinal: 'asc' }
+				}
+			},
 			orderBy: [{ ordinal: 'asc' }]
 		}),
 		boardId: params.id
@@ -36,6 +40,11 @@ const newCardSchema = z.object({
 	listId: z.string().min(8),
 	title: z.string(),
 	ordinal: z.coerce.number()
+})
+
+const editCardSchema = z.object({
+	id: z.string().min(8),
+	title: z.string()
 })
 
 export const actions = {
@@ -87,6 +96,21 @@ export const actions = {
 
 			return await prisma.card.create({
 				data: { title, listId, ordinal }
+			})
+		} else {
+			return fail(400, { errors: parsedData.error.errors })
+		}
+	},
+	'card/edit': async ({ request }) => {
+		const rawData = Object.fromEntries(await request.formData())
+		const parsedData = editCardSchema.safeParse(rawData)
+
+		if (parsedData.success) {
+			const { id, title } = parsedData.data
+
+			return await prisma.card.update({
+				where: { id },
+				data: { title }
 			})
 		} else {
 			return fail(400, { errors: parsedData.error.errors })
