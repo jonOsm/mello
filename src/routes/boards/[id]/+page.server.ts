@@ -48,8 +48,9 @@ const editCardSchema = z.object({
 })
 
 const moveCardSchema = z.object({
-	incrementPastOrdinal: z.coerce.number(),
-	draggedIds: z.array(z.object({ id: z.string().min(8), newOrdinal: z.coerce.number() }))
+	droppedAtOrdinal: z.coerce.number(),
+	newListId: z.string().min(8),
+	draggedId: z.string().min(8)
 })
 
 export const actions = {
@@ -126,12 +127,16 @@ export const actions = {
 		const parsedData = moveCardSchema.safeParse(rawData)
 
 		if (parsedData.success) {
-			const { incrementPastOrdinal, draggedIds } = parsedData.data
-			const
-			return await prisma.card.update({
-				where: { id },
-				data: { title }
+			const { droppedAtOrdinal, draggedId, newListId } = parsedData.data
+			await prisma.card.updateMany({
+				where: { listId: newListId, ordinal: { gte: droppedAtOrdinal } },
+				data: { ordinal: { increment: 1 } }
 			})
+			await prisma.card.update({
+				where: { id: draggedId },
+				data: { ordinal: droppedAtOrdinal, listId: newListId }
+			})
+			return
 		} else {
 			return fail(400, { errors: parsedData.error.errors })
 		}

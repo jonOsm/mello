@@ -4,24 +4,19 @@ import type { Card } from '$lib/types/card'
 // by default it is globally accessible
 //TODO: Support list drag and drop
 interface DragAndDrop {
-	sourceItems: Card[] //array of what?
+	item: Card | null //array of what?
 	destination: Card | null
 	submit: boolean
 }
 export const dragAndDrop: Writable<DragAndDrop> = writable({
-	sourceItems: [],
+	item: null,
 	destination: null,
 	submit: false
 })
 
 export const submit = () => {
 	dragAndDrop.update((dAndD) => {
-		console.log(dAndD)
-		if (
-			dAndD.sourceItems.length > 0 &&
-			dAndD.destination &&
-			dAndD.sourceItems.find((d) => d.id !== dAndD.destination?.id)
-		) {
+		if (dAndD.item && dAndD.destination && dAndD.item.id !== dAndD.destination?.id) {
 			console.log('update ordinals and submit here')
 			return { ...dAndD, submit: true }
 		} else {
@@ -32,5 +27,5 @@ export const submit = () => {
 }
 
 export const reset = () => {
-	dragAndDrop.set({ sourceItems: [], destination: null, submit: false })
+	dragAndDrop.set({ item: null, destination: null, submit: false })
 }

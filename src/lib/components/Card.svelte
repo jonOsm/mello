@@ -26,7 +26,7 @@
 	class="card card-hover"
 	on:dragstart={() => {
 		console.log('dragging')
-		$dragAndDrop.sourceItems = [card]
+		$dragAndDrop.item = card
 	}}
 	on:dragend={() => {
 		submit()

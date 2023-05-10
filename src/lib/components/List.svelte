@@ -29,15 +29,10 @@
 	}
 </script>
 
-<form use:enhance bind:this={bulkEdit} method="post" action="?/cards/bulk/edit" class="hidden">
-	<input type="hidden" name="incrementPastOrdinal" value={$dragAndDrop.destination?.id} />
-	<input
-		type="hidden"
-		name="draggedIds"
-		value={$dragAndDrop.sourceItems.map((d, i) => {
-			return { id: d.id, newOrdinal: i + ($dragAndDrop.destination?.ordinal || 0) }
-		})}
-	/>
+<form use:enhance bind:this={bulkEdit} method="post" action="?/cards/bulk/move" class="hidden">
+	<input type="hidden" name="droppedAtOrdinal" value={$dragAndDrop.destination?.ordinal} />
+	<input type="hidden" name="newListId" value={$dragAndDrop.destination?.listId} />
+	<input type="hidden" name="draggedId" value={$dragAndDrop.item?.id} />
 </form>
 <div in:slide class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
 	{#if !isEditMode}
