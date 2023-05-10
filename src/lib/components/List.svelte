@@ -5,7 +5,6 @@
 	import ListTitleForm from './ListTitleForm.svelte'
 	import Card from './Card.svelte'
 	import NewCardForm from './NewCardForm.svelte'
-	import { slide } from 'svelte/transition'
 	import { activeBoard } from '$lib/stores/board'
 	import { dragAndDrop, reset } from '$lib/stores/dragAndDrop'
 
@@ -14,8 +13,11 @@
 
 	let isEditMode = false
 	let isAddingCard = false
-
+	let cursorPosY = 0
 	let maxCardOrdinal: number
+	let selfRef: HTMLDivElement
+	let midpoints: { card: CardType; midpointY: number }[] = []
+	let dropHintOrdinal = 0
 	$: if (list.cards) {
 		maxCardOrdinal = Math.max(...list.cards?.map((c: CardType) => c.ordinal), 0)
 	}
@@ -34,7 +36,20 @@
 	<input type="hidden" name="newListId" value={$dragAndDrop.destination?.listId} />
 	<input type="hidden" name="draggedId" value={$dragAndDrop.item?.id} />
 </form>
-<div in:slide class="flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token">
+
+<div
+	bind:this={selfRef}
+	on:dragover={(e) => {
+		cursorPosY = e.clientY
+		const currentMidpoint = midpoints.find((info) => e.clientY < info.midpointY)
+		dropHintOrdinal = currentMidpoint?.card.ordinal || maxCardOrdinal + 1
+	}}
+	on:dragenter={() => {
+		$dragAndDrop.activeListId = list.id || ''
+	}}
+	on:drop={(e) => {}}
+	class="list flex-none w-[300px] h-fit flex-col flex gap-1 p-3 bg-surface-200-700-token"
+>
 	{#if !isEditMode}
 		<ListTitleForm
 			{list}
@@ -45,8 +60,14 @@
 		<div>
 			{#if list.cards}
 				{#each list.cards as card}
-					<Card {card} />
+					{#if $dragAndDrop.activeListId === list.id && dropHintOrdinal === card.ordinal}
+						<div id="drophint" class={'h-10 w-full bg-black'} />
+					{/if}
+					<Card {card} on:midpointUpdated={(e) => (midpoints = [...midpoints, e.detail])} />
 				{/each}
+				{#if $dragAndDrop.activeListId === list.id && dropHintOrdinal > maxCardOrdinal}
+					<div id="drophint" class={'h-10 w-full bg-black'} />
+				{/if}
 			{/if}
 			{#if isAddingCard}
 				<NewCardForm card={defaultCard} on:submit={() => (isAddingCard = false)} />

@@ -6,10 +6,12 @@ import type { Card } from '$lib/types/card'
 interface DragAndDrop {
 	item: Card | null //array of what?
 	destination: Card | null
+	activeListId: string
 	submit: boolean
 }
 export const dragAndDrop: Writable<DragAndDrop> = writable({
 	item: null,
+	activeListId: '',
 	destination: null,
 	submit: false
 })
@@ -27,5 +29,5 @@ export const submit = () => {
 }
 
 export const reset = () => {
-	dragAndDrop.set({ item: null, destination: null, submit: false })
+	dragAndDrop.set({ item: null, activeListId: '', destination: null, submit: false })
 }
